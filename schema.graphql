@@ -1,0 +1,48 @@
+directive @public on FIELD_DEFINITION
+
+
+scalar URL
+scalar EmailAddress
+scalar UUID
+
+
+enum Status{
+    SUCCESS
+    FAILURE
+    DOES_NOT_EXIST
+}
+
+
+
+type User {
+    email: EmailAddress!
+    id: UUID!
+    avatarURL: URL!
+}
+type Query {
+    status: Status! @public
+    signIn(input: CredentialsInput!): User! @public   # returns Authorization token on header
+    sendForgotPasswordEmail(email: String): Status! @public
+    signOut: Status!
+}
+type Mutation {
+    signUp(input: CredentialsInput!): User! @public  # returns Authorization token on header
+    resetPassword(id:UUID, input: ResetPasswordInput):Status! @public
+    updateUser(id:UUID, input: UpdateUserInput): User!
+    deleteUser(id: UUID): String!
+}
+
+
+
+input CredentialsInput {
+    email: EmailAddress!
+    password: String!
+}
+input UpdateUserInput {
+    email: EmailAddress
+    avatarURL: URL
+}
+input ResetPasswordInput {
+    oldPassword: String!
+    newPassword: String
+}

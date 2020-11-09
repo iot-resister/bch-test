@@ -1,0 +1,7 @@
+node_modules/
+.env*
+certs.json
+.idea/
+coverage/
+mochawesome-report/
+yarn-error.log
