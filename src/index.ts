@@ -18,31 +18,31 @@ import * as Sentry from "@sentry/node";
 
 Sentry.init({ dsn: "" });
 
-const resolvers: IResolvers = {
-  URL: GraphQLURL,
-  EmailAddress: GraphQLEmailAddress,
-  UUID: GraphQLUUID,
-  Query: {
-    status: (): string => "SUCCESS",
-    signIn: async (
-      _: never,
-      { input }: QuerySignInArgs,
-      { provider }: Context
-    ): Promise<User> => provider.signIn(input),
-  },
-  Mutation: {
-    signUp: async (
-      _: never,
-      { input }: MutationSignUpArgs,
-      { provider }: Context
-    ): Promise<User> => provider.signUp(input),
-    deleteUser: async (
-      _: never,
-      { id }: MutationDeleteUserArgs,
-      { provider }: Context
-    ): Promise<String> => provider.deleteUser(id),
-  },
-};
+//const resolvers: IResolvers = {
+//  URL: GraphQLURL,
+//  EmailAddress: GraphQLEmailAddress,
+//  UUID: GraphQLUUID,
+//  Query: {
+//    status: (): string => "SUCCESS",
+//    signIn: async (
+//      _: never,
+//      { input }: QuerySignInArgs,
+//      { provider }: Context
+//    ): Promise<User> => provider.signIn(input),
+//  },
+//  Mutation: {
+//    signUp: async (
+//      _: never,
+//      { input }: MutationSignUpArgs,
+//      { provider }: Context
+//    ): Promise<User> => provider.signUp(input),
+//    deleteUser: async (
+//      _: never,
+//      { id }: MutationDeleteUserArgs,
+//      { provider }: Context
+//    ): Promise<String> => provider.deleteUser(id),
+//  },
+//};
 
 const typeDefs = readFileSync("schema.graphql").toString();
 
