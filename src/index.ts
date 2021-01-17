@@ -43,8 +43,11 @@ const resolvers: IResolvers = {
     ): Promise<String> => provider.deleteUser(id),
   },
 };
+
 const typeDefs = readFileSync("schema.graphql").toString();
+
 applyAuthenticationGuard(resolvers, typeDefs);
+
 const schema = makeExecutableSchema({
   typeDefs,
   resolvers,
@@ -52,7 +55,9 @@ const schema = makeExecutableSchema({
 interface IncomingMessage {
   rawBody: any;
 }
+
 const app = express();
+
 app.use(express.json());
 
 app.use(
@@ -62,7 +67,9 @@ app.use(
     return { schema, context: { ...req, provider } };
   })
 );
+
 const { PORT } = process.env;
+
 app.listen(PORT);
 
 export default app;
