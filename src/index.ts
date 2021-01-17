@@ -46,11 +46,11 @@ const mutations = {
   ): Promise<String> => provider.deleteUser(id),
 };
 
-const resolvers: IResolvers = {
-  ...scalars,
-  Query: queries,
-  Mutation: mutations,
-};
+// const resolvers: IResolvers = {
+//   ...scalars,
+//   Query: queries,
+//   Mutation: mutations,
+// };
 
 const typeDefs = readFileSync("schema.graphql").toString();
 
