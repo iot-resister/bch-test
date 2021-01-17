@@ -2,8 +2,8 @@ version: "2"
 exclude_patterns:
   - "coverage/"
   - "node_modules/"
-checks:
-  similar-code:
-    config:
-      threshold: 60
+#checks:
+#  similar-code:
+#    config:
+#      threshold: 60
 
