@@ -43,6 +43,6 @@ input UpdateUserInput {
     avatarURL: URL
 }
 input ResetPasswordInput {
-    oldPassword: String!
-    newPassword: String
+    oldPassword: String
+    newPassword: String!
 }

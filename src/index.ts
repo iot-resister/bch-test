@@ -1,5 +1,4 @@
 import express, { Response } from "express";
-import { config } from "dotenv";
 import { graphqlHTTP } from "express-graphql";
 import { IResolvers, makeExecutableSchema } from "graphql-tools";
 import { readFileSync } from "fs";
@@ -13,11 +12,11 @@ import {
 import Provider from "./identityProvider";
 import { GraphQLEmailAddress, GraphQLURL, GraphQLUUID } from "graphql-scalars";
 import { Context } from "./types/interfaces";
-import { applyAuthenticationGuard } from "./authentication-guard";
+import { applyAuthenticationGuard } from "./authenticationGuard";
 
-config({ path: `.env.${process.env.NODE_ENV}` });
+import * as Sentry from "@sentry/node";
 
-const app = express();
+Sentry.init({ dsn: "" });
 
 const resolvers: IResolvers = {
   URL: GraphQLURL,
@@ -50,11 +49,16 @@ const schema = makeExecutableSchema({
   typeDefs,
   resolvers,
 });
+interface IncomingMessage {
+  rawBody: any;
+}
+const app = express();
+app.use(express.json());
 
 app.use(
   "/graphql",
   graphqlHTTP(async (req, res) => {
-    const provider = await Provider.init(res as Response);
+    const provider = new Provider(res as Response);
     return { schema, context: { ...req, provider } };
   })
 );

@@ -88,6 +88,6 @@ export type UpdateUserInput = {
 };
 
 export type ResetPasswordInput = {
-  oldPassword: Scalars['String'];
-  newPassword?: Maybe<Scalars['String']>;
+  oldPassword?: Maybe<Scalars['String']>;
+  newPassword: Scalars['String'];
 };

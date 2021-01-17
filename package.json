@@ -2,24 +2,35 @@
   "engines": {
     "node": ">=14.15.0"
   },
-  "scripts": {
-    "generate": "graphql-codegen --config codegen.yml"
-  },
   "engineStrict": true,
+  "license": "MIT",
+  "scripts": {
+    "test": "mocha -require ts-node/register  tests/**/*.test.ts  --timeout 5000 --exit",
+    "coverage": "c8 --lines 80 --functions 80 --branches 80 --exclude tests --exclude coverage  --reporter=text  --reporter=html yarn test --reporter min",
+    "generate": "graphql-codegen --config codegen.yml",
+    "depcheck": "npx depcheck --ignore-bin-package=true --ignores=\"mocha*,@types/*,@graphql-codegen/*,k6*\" && snyk protect",
+    "lint": "eslint '*/**/*.js' --quiet --fix",
+    "quality": "codeclimate analyze",
+    "perf": "ts-node src &  (sleep 3s &&  k6 run -e HOSTNAME=localhost -e PORT=3001 performance.js) && pkill node",
+    "commit": "yarn lint && yarn test && yarn coverage && yarn depcheck && yarn quality && yarn perf",
+    "build": "tsc && cp schema.graphql dist/"
+  },
   "dependencies": {
     "@sentry/node": "^5.27.1",
-    "dotenv": "^8.2.0",
+    "axios": "^0.21.0",
+    "db-json.js": "0.0.1-security",
     "express": "^4.17.1",
     "express-graphql": "^0.11.0",
     "graphql": "^15.3.0",
     "graphql-scalars": "^1.4.1",
     "graphql-tools": "^7.0.1",
+    "hoek": "^6.1.3",
     "jsonwebtoken": "^8.5.1",
     "jwk-to-pem": "^2.0.4",
-    "keycloak-admin": "^1.13.0",
     "openid-client": "^4.2.1",
     "pino": "^6.7.0",
-    "request-promise": "^4.2.6"
+    "request-promise": "^4.2.6",
+    "urijs": "^1.19.5"
   },
   "devDependencies": {
     "@graphql-codegen/cli": "1.19.0",
@@ -33,7 +44,7 @@
     "@types/request-promise": "^4.1.46",
     "@types/sinon": "^9.0.8",
     "@types/supertest": "^2.0.10",
-    "c8": "^7.2.0",
+    "c8": "^7.3.5",
     "eslint": "7.2.0",
     "eslint-config-airbnb-base": "14.2.0",
     "eslint-config-prettier": "^6.11.0",
@@ -42,13 +53,13 @@
     "eslint-plugin-security": "^1.4.0",
     "graphql-tag": "^2.11.0",
     "jwt-decode": "^3.1.1",
-    "jwt-simple": "^0.5.6",
     "mocha": "^8.0.1",
-    "mochawesome": "^6.1.1",
+    "mocha-junit-reporter": "^2.0.0",
     "nock": "^12.0.3",
     "prettier": "^2.0.5",
+    "retire": "^2.2.3",
     "sinon": "^9.0.2",
-    "snyk": "^1.420.0",
+    "snyk": "^1.437.3",
     "supertest": "^6.0.1",
     "ts-node": "^9.0.0",
     "typescript": "^4.0.5"

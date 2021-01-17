@@ -1,0 +1,59 @@
+image: node13
+cache:
+  paths:
+    - node_modules
+before_script:
+  - yarn config set registry https://npm.open-registry.dev
+  - yarn install --frozen-lockfile
+
+stages:
+  - verify
+  - release
+
+quality:
+  stage: verify
+  image: docker:stable
+  variables:
+    DOCKER_DRIVER: overlay1
+  services:
+    - docker:stable-dind
+  script:
+    - docker run --env CODECLIMATE_CODE="$PWD" --volume "$PWD":/code --volume /var/run/docker.sock:/var/run/docker.sock --volume /tmp/cc:/tmp/cc codeclimate/codeclimate analyze -f json > quality.json
+  artifacts:
+    reports:
+      codequality: quality.json
+
+test:
+  stage: verify
+  script:
+    - yarn test --reporter mocha-junit-reporter
+  artifacts:
+    reports:
+      junit: test-results.xml
+
+coverage:
+  stage: verify
+  script:
+    - node_modules/.bin/c8 --lines 80 --functions 80 --branches 80 --exclude tests --exclude coverage  --reporter=text  --reporter=cobertura yarn test --reporter min
+  artifacts:
+    reports:
+      cobertura: coverage/cobertura-coverage.xml
+
+dependency_check:
+  stage: verify
+  script:
+    - yarn depcheck
+#  waiting on request  https://github.com/keytelematics/gitlab-ci-yarn-audit-parser/issues/4
+#  artifacts:
+#    reports:
+#      dependency_scanning: gl-dependency-scanning-report.json
+
+
+lint👽:
+  stage: verify
+  script:
+    - yarn lint
+
+
+
+
